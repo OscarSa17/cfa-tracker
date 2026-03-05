@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CFA Investment Foundations — Oscar Sánchez</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0D1117;--bg2:#161B22;--bg3:#1C2330;--border:#30363D;
+    --navy:#1F6FEB;--blue:#58A6FF;--blue-dim:#1D3557;
+    --gold:#D29922;--gold-dim:#2D2009;--gold-light:#E3B341;
+    --green:#3FB950;--green-dim:#0D2818;
+    --gray:#8B949E;--gray2:#6E7681;--white:#E6EDF3;--text:#CDD9E5;--text2:#8B949E;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:28px 16px 60px;}
+  .container{max-width:900px;margin:0 auto;}
+
+  .header{background:linear-gradient(135deg,#0D1F3C,#1B2A4A);border:1px solid #1F3A6E;border-radius:18px;padding:32px 36px;margin-bottom:20px;position:relative;overflow:hidden;}
+  .header::before{content:'';position:absolute;top:-60px;right:-60px;width:220px;height:220px;background:radial-gradient(circle,rgba(31,111,235,0.15),transparent 70%);border-radius:50%;}
+  .header-row{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px;}
+  .header h1{font-family:'DM Serif Display',serif;font-size:26px;color:#E6EDF3;line-height:1.2;}
+  .header h1 span{color:var(--gold-light);font-style:italic;}
+  .header-sub{font-size:12px;color:var(--gray);margin-top:6px;font-family:'DM Mono',monospace;letter-spacing:.5px;}
+  .deadline-box{background:rgba(210,153,34,0.1);border:1px solid rgba(210,153,34,0.3);border-radius:12px;padding:12px 18px;text-align:right;}
+  .deadline-box .dlabel{font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:1px;font-family:'DM Mono',monospace;}
+  .deadline-box .ddate{font-size:20px;font-weight:600;color:#E6EDF3;margin-top:2px;}
+  .deadline-box .ddays{font-size:11px;color:var(--gray);font-family:'DM Mono',monospace;}
+
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px;}
+  .stat{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:18px 20px;}
+  .stat-label{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gray2);font-family:'DM Mono',monospace;margin-bottom:8px;}
+  .stat-val{font-family:'DM Serif Display',serif;font-size:30px;color:var(--blue);}
+  .stat-val.gold{color:var(--gold-light);}
+  .stat-val.green{color:var(--green);}
+  .stat-sub{font-size:11px;color:var(--gray2);margin-top:3px;}
+
+  .overall{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px 24px;margin-bottom:24px;}
+  .overall-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+  .overall-title{font-weight:600;font-size:14px;color:var(--white);}
+  .overall-pct{font-family:'DM Mono',monospace;font-size:20px;color:var(--blue);}
+  .bar-track{background:var(--bg3);border-radius:100px;height:8px;overflow:hidden;}
+  .bar-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,#1F6FEB,#58A6FF);transition:width .5s ease;}
+
+  .course-block{margin-bottom:28px;}
+  .course-header{display:flex;align-items:center;gap:12px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+  .course-badge{font-family:'DM Mono',monospace;font-size:10px;padding:3px 10px;border-radius:100px;font-weight:500;white-space:nowrap;}
+  .c1{background:rgba(31,111,235,0.15);color:#58A6FF;border:1px solid rgba(31,111,235,0.3);}
+  .c2{background:rgba(63,185,80,0.12);color:#3FB950;border:1px solid rgba(63,185,80,0.25);}
+  .c3{background:rgba(210,153,34,0.15);color:#E3B341;border:1px solid rgba(210,153,34,0.3);}
+  .c4{background:rgba(188,140,255,0.15);color:#BC8CFF;border:1px solid rgba(188,140,255,0.3);}
+  .c5{background:rgba(255,123,114,0.12);color:#FF7B72;border:1px solid rgba(255,123,114,0.25);}
+  .c6{background:rgba(255,166,87,0.12);color:#FFA657;border:1px solid rgba(255,166,87,0.25);}
+  .cexam{background:rgba(210,153,34,0.2);color:#E3B341;border:1px solid rgba(210,153,34,0.4);}
+  .course-title{font-family:'DM Serif Display',serif;font-size:17px;color:var(--white);}
+  .course-dates{font-size:11px;color:var(--gray);font-family:'DM Mono',monospace;margin-left:auto;white-space:nowrap;}
+
+  .module-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;margin-bottom:10px;overflow:hidden;transition:border-color .2s;}
+  .module-card:hover{border-color:#58A6FF44;}
+  .module-card.done{border-left:3px solid var(--green);}
+  .module-card.active{border-left:3px solid var(--blue);}
+  .module-card.pending{border-left:3px solid var(--border);}
+  .module-card.exam-card{border-left:3px solid var(--gold);}
+
+  .module-top{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;cursor:pointer;gap:12px;user-select:none;}
+  .module-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0;}
+  .module-code{font-family:'DM Mono',monospace;font-size:10px;color:var(--gray2);white-space:nowrap;}
+  .module-name{font-weight:600;font-size:13px;color:var(--white);}
+  .module-right{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+  .mod-pct{font-family:'DM Mono',monospace;font-size:12px;color:var(--blue);min-width:32px;text-align:right;}
+  .status-pill{padding:3px 10px;border-radius:100px;font-size:10px;font-weight:500;white-space:nowrap;}
+  .pill-done{background:var(--green-dim);color:var(--green);}
+  .pill-active{background:var(--blue-dim);color:var(--blue);}
+  .pill-pending{background:var(--bg3);color:var(--gray);}
+  .pill-exam{background:var(--gold-dim);color:var(--gold-light);}
+  .chevron{color:var(--gray);font-size:11px;transition:transform .25s;}
+  .chevron.open{transform:rotate(180deg);}
+
+  .module-body{display:none;padding:0 18px 16px;border-top:1px solid var(--border);}
+  .module-body.open{display:block;}
+
+  .lessons-title{font-size:10px;color:var(--gray2);text-transform:uppercase;letter-spacing:.8px;font-family:'DM Mono',monospace;margin:12px 0 8px;}
+  .lesson-item{display:flex;align-items:flex-start;gap:10px;padding:7px 10px;border-radius:8px;margin-bottom:3px;cursor:pointer;transition:background .15s;}
+  .lesson-item:hover{background:var(--bg3);}
+  .lesson-check{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--border);background:transparent;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s;font-size:10px;margin-top:1px;}
+  .lesson-check.checked{background:var(--green);border-color:var(--green);color:#0D1117;}
+  .lesson-text{font-size:13px;color:var(--text);line-height:1.4;}
+  .lesson-text.checked-text{color:var(--gray2);text-decoration:line-through;}
+
+  .notes-area{margin-top:12px;}
+  textarea{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;resize:none;outline:none;transition:border-color .2s;}
+  textarea:focus{border-color:var(--blue);}
+  textarea::placeholder{color:var(--gray2);}
+
+  .save-btn{display:block;width:100%;padding:14px;background:linear-gradient(135deg,#1F6FEB,#388BFD);color:white;border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-top:8px;transition:opacity .2s,transform .1s;letter-spacing:.3px;}
+  .save-btn:hover{opacity:.9;transform:translateY(-1px);}
+  .saved-msg{text-align:center;font-size:12px;color:var(--green);font-family:'DM Mono',monospace;margin-top:8px;height:16px;}
+
+  .tips{background:linear-gradient(135deg,#0D1F3C,#162032);border:1px solid #1F3A6E;border-radius:16px;padding:22px 26px;margin-top:24px;}
+  .tips h3{font-family:'DM Serif Display',serif;font-size:17px;color:var(--gold-light);margin-bottom:12px;}
+  .tip{display:flex;gap:10px;margin-bottom:9px;font-size:13px;color:var(--text2);line-height:1.5;}
+  .tip-dot{width:5px;height:5px;background:var(--gold);border-radius:50%;margin-top:7px;flex-shrink:0;}
+
+  @media(max-width:600px){.stats{grid-template-columns:1fr 1fr;}.header{padding:20px;}.course-dates{display:none;}}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="header-row">
+    <div>
+      <h1>CFA Investment <span>Foundations</span></h1>
+      <div class="header-sub">Oscar Enrique Sánchez Juárez · Tracker de Progreso 2026</div>
+    </div>
+    <div class="deadline-box">
+      <div class="dlabel">Deadline</div>
+      <div class="ddate">20 Mayo 2026</div>
+      <div class="ddays" id="daysLeft">— días restantes</div>
+    </div>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="stat-label">Progreso Total</div><div class="stat-val" id="totalPct">0%</div><div class="stat-sub">del programa</div></div>
+  <div class="stat"><div class="stat-label">Lecciones</div><div class="stat-val green" id="lessonsCount">0</div><div class="stat-sub" id="lessonsTotal">de — completadas</div></div>
+  <div class="stat"><div class="stat-label">Ritmo Meta</div><div class="stat-val gold">1.5h</div><div class="stat-sub">por día</div></div>
+</div>
+
+<div class="overall">
+  <div class="overall-row">
+    <div class="overall-title">Avance General del Programa</div>
+    <div class="overall-pct" id="overallPct">0%</div>
+  </div>
+  <div class="bar-track"><div class="bar-fill" id="overallBar" style="width:0%"></div></div>
+</div>
+
+<div id="coursesContainer"></div>
+
+<button class="save-btn" onclick="saveAll()">💾 Guardar Progreso</button>
+<div class="saved-msg" id="savedMsg"></div>
+
+<div class="tips">
+  <h3>📌 Reglas del Plan</h3>
+  <div class="tip"><div class="tip-dot"></div>No avances al siguiente curso sin completar el anterior al 100%</div>
+  <div class="tip"><div class="tip-dot"></div>Fines de semana: 2.5 horas en lugar de 1.5 para generar colchón</div>
+  <div class="tip"><div class="tip-dot"></div>Semana de repaso (6–13 mayo): mínimo 150 practice questions</div>
+  <div class="tip"><div class="tip-dot"></div>Presenta el examen entre el 14 y 18 de mayo — no el último día</div>
+  <div class="tip"><div class="tip-dot"></div>Técnica Pomodoro: 25 min estudio / 5 min descanso</div>
+</div>
+
+</div>
+<script>
+const courses=[
+  {id:'c1',code:'COURSE 1',badgeCls:'c1',title:'Industry Overview and Structure',dates:'4 mar — 14 mar',modules:[
+    {id:'m1_1',name:'Overview of the Investment Industry',lessons:['What is the Financial Services Industry?','How Economies Benefit from the Investment Industry','How Investors Benefit from the Investment Industry','Investment Industry Participants']},
+    {id:'m1_2',name:'Structure of the Investment Industry',lessons:['Structure of Investment Firms','Investment Firm Staff and Leadership','Financial Institutions']},
+    {id:'m1_3',name:'Introduction to Industry Services',lessons:['Investment Management Services','Investment Information Services','Trading Services']},
+    {id:'m1_4',name:'Financial Planning Services and Introduction to FinTech',lessons:['Needs Served by the Investment Industry','Financial Planning Services','Introduction to FinTech','FinTech Applications']},
+    {id:'m1_5',name:'Investment Professionalism and Regulations',lessons:['Key Forces Driving the Investment Industry','Ethics and the Investment Industry','Financial Industry Regulation','Objectives of Regulation','Types of Regulation','Consequences of Compliance Failure']},
+    {id:'m1_6',name:'Professionalism and Ethical Decision Making',lessons:['Trust and Stakeholder Obligations','Ethics and Standards of Professional Conduct','Benefits of Ethical Conduct and Consequences of Unethical Conduct','Ethical Decision-Making Framework']},
+  ]},
+  {id:'c2',code:'COURSE 2',badgeCls:'c2',title:'Types and Functioning of Markets',dates:'15 mar — 25 mar',modules:[
+    {id:'m2_1',name:'Types of Security Markets and Trading Venues',lessons:['Primary and Secondary Security Markets','The Role of Issuers','Primary Market Transactions','Trading Venues','Market Structures']},
+    {id:'m2_2',name:'Order Processing and Opportunities with Decentralized Finance',lessons:['Positions','Orders','Clearing and Settlement','Transaction Costs','What is Decentralized Finance (DeFi)?']},
+    {id:'m2_3',name:'Investment Vehicles: Pooled Investments, ETFs, and Security Market Indices',lessons:['Direct and Indirect Investments','Pooled Investments','Security Market Indices','Index Funds']},
+    {id:'m2_4',name:'Investment Vehicles: Hedge Funds, Fund of Funds, and Managed Accounts',lessons:['Hedge Funds','Fund of Funds','Managed Accounts']},
+  ]},
+  {id:'c3',code:'COURSE 3',badgeCls:'c3',title:'Investment Instruments',dates:'26 mar — 5 abr',modules:[
+    {id:'m3_1',name:'Quantitative Concepts',lessons:['Time Value of Money','Present Value and Future Value','Net Present Value','Time Value of Money Applications','Descriptive Statistics','Measures of Dispersion','Normal Distribution','Correlation']},
+    {id:'m3_2',name:'Introduction to Investment Instruments and Equity Securities',lessons:['Introduction to Investment Instruments','Introduction to Equity Securities','Valuation of Common Shares','Risks of Investing in Equity Securities','Corporate Actions']},
+    {id:'m3_3',name:'Debt Securities',lessons:['Introduction to Debt Securities','Seniority Ranking','Types of Bonds','Bonds with Embedded Provisions','Valuation of Debt Securities','Risks of Investing in Debt Securities','Yield Curve','Comparing Equity and Debt Securities']},
+    {id:'m3_4',name:'Derivatives',lessons:['Introduction to Derivatives Contracts','Uses of Derivatives Contracts','Key Terms of Derivatives Contracts','Forwards and Futures','Options','Swaps']},
+    {id:'m3_5',name:'Alternative Investments',lessons:['Advantages and Limitations of Alternative Investments','Private Equity Investments','Real Estate Investments','Commodity Investments']},
+  ]},
+  {id:'c4',code:'COURSE 4',badgeCls:'c4',title:'Investment Inputs and Tools',dates:'6 abr — 16 abr',modules:[
+    {id:'m4_1',name:'Microeconomics',lessons:['Introduction to Economics and Microeconomics','Demand and Supply','Market Equilibrium','Elasticities of Demand','Profit and Costs of Production','Market Environment']},
+    {id:'m4_2',name:'Macroeconomics',lessons:['Introduction to Macroeconomics','Gross Domestic Product and the Business Cycle','Economic Growth','The Business Cycle','Economic Indicators','Inflation','Monetary and Fiscal Policies']},
+    {id:'m4_3',name:'Economics of International Trade',lessons:['Imports and Exports','Comparative Advantages Among Countries','Balance of Payments','Foreign Exchange Rate Systems','Value of Currencies','The Foreign Exchange Market']},
+    {id:'m4_4',name:'Financial Statements',lessons:['Roles in Financial Reporting','The Balance Sheet','The Income Statement','The Cash Flow Statement','Links Between Financial Statements','Financial Statement Analysis']},
+  ]},
+  {id:'c5',code:'COURSE 5',badgeCls:'c5',title:'Serving Client Needs',dates:'17 abr — 27 abr',modules:[
+    {id:'m5_1',name:'Investors and Their Needs',lessons:["Types and Characteristics of Investors","Factors that Affect Investors' Needs","Investment Policy Statements"]},
+    {id:'m5_2',name:'Investment Management',lessons:['Risk and Portfolio Diversification','Asset Allocation and Portfolio Construction','Passive and Active Investment Management','Market Inefficiencies']},
+    {id:'m5_3',name:'Risk Management',lessons:['Definition and Classification of Risks','The Risk Management Process','Risk Management Functions','Operational Risk','Compliance Risk','Investment Risk','Value at Risk (VaR)']},
+    {id:'m5_4',name:'Performance Evaluation',lessons:['The Performance Evaluation Process','Measures of Return','Benchmarks','Measures of Risk','Measures of Relative Performance','Alpha','Performance Attribution']},
+  ]},
+  {id:'c6',code:'COURSE 6',badgeCls:'c6',title:'Serving the Greater Good',dates:'28 abr — 5 may',modules:[
+    {id:'m6_1',name:'Ethics in Investment Management',lessons:['Ethical Principles and the Investment Industry','CFA Institute Code of Ethics','Standards of Professional Conduct','Global Investment Performance Standards (GIPS)']},
+    {id:'m6_2',name:'Regulation and Compliance',lessons:['Purpose of Regulation','Types of Financial Regulation','Regulatory Bodies and Frameworks','Compliance in the Investment Industry']},
+  ]},
+  {id:'exam',code:'ASSESSMENT',badgeCls:'cexam',title:'Investment Foundations® Assessment',dates:'14 may — 20 may',isExam:true,modules:[
+    {id:'mexam',name:'Final Assessment — Repaso y Examen',lessons:['Revisar Course 1: Industry Overview','Revisar Course 2: Markets','Revisar Course 3: Instruments','Revisar Course 4: Inputs & Tools','Revisar Course 5: Client Needs','Revisar Course 6: Greater Good','Completar 150+ practice questions','Presentar el examen final']},
+  ]},
+];
+
+let state={};
+function loadState(){try{const s=localStorage.getItem('cfa_dark_oscar');return s?JSON.parse(s):{}}catch(e){return{}}}
+function saveAll(){
+  localStorage.setItem('cfa_dark_oscar',JSON.stringify(state));
+  const msg=document.getElementById('savedMsg');
+  msg.textContent='✓ Progreso guardado';
+  setTimeout(()=>msg.textContent='',3000);
+  updateOverall();
+}
+
+function render(){
+  state=loadState();
+  const container=document.getElementById('coursesContainer');
+  container.innerHTML='';
+  courses.forEach(course=>{
+    const block=document.createElement('div');
+    block.className='course-block';
+    block.innerHTML=`<div class="course-header"><span class="course-badge ${course.badgeCls}">${course.code}</span><span class="course-title">${course.title}</span><span class="course-dates">📅 ${course.dates}</span></div>`;
+    course.modules.forEach(mod=>{
+      const modState=state[mod.id]||{lessons:{},notes:''};
+      const totalL=mod.lessons.length;
+      const doneL=mod.lessons.filter((_,i)=>modState.lessons[i]).length;
+      const pct=totalL>0?Math.round((doneL/totalL)*100):0;
+      let statusCls,pillCls,pillTxt;
+      if(pct===100){statusCls='done';pillCls='pill-done';pillTxt='✓ Completado';}
+      else if(pct>0){statusCls='active';pillCls='pill-active';pillTxt='En Progreso';}
+      else if(course.isExam){statusCls='exam-card';pillCls='pill-exam';pillTxt='Examen Final';}
+      else{statusCls='pending';pillCls='pill-pending';pillTxt='Pendiente';}
+      const lessonsHTML=mod.lessons.map((l,i)=>{
+        const checked=modState.lessons[i]?true:false;
+        return `<div class="lesson-item" onclick="toggleLesson('${mod.id}',${i},this)"><div class="lesson-check ${checked?'checked':''}">${checked?'✓':''}</div><div class="lesson-text ${checked?'checked-text':''}">${l}</div></div>`;
+      }).join('');
+      const card=document.createElement('div');
+      card.className=`module-card ${statusCls}`;
+      card.id='card_'+mod.id;
+      card.innerHTML=`
+        <div class="module-top" onclick="toggleCard('${mod.id}')">
+          <div class="module-left"><span class="module-code">${mod.id.toUpperCase().replace('_','.')}</span><span class="module-name">${mod.name}</span></div>
+          <div class="module-right"><span class="mod-pct" id="mpct_${mod.id}">${pct}%</span><span class="status-pill ${pillCls}" id="pill_${mod.id}">${pillTxt}</span><span class="chevron" id="chev_${mod.id}">▼</span></div>
+        </div>
+        <div class="module-body" id="body_${mod.id}">
+          <div class="lessons-title" id="ltitle_${mod.id}">Lecciones — ${doneL} de ${totalL} completadas</div>
+          <div id="lessons_${mod.id}">${lessonsHTML}</div>
+          <div class="notes-area"><textarea rows="2" placeholder="📝 Notas, dudas o temas pendientes..." id="notes_${mod.id}" onchange="updateNotes('${mod.id}',this.value)">${modState.notes||''}</textarea></div>
+        </div>`;
+      block.appendChild(card);
+    });
+    container.appendChild(block);
+  });
+  updateOverall();
+  updateDays();
+}
+
+function toggleCard(modId){
+  document.getElementById('body_'+modId).classList.toggle('open');
+  document.getElementById('chev_'+modId).classList.toggle('open');
+}
+
+function toggleLesson(modId,idx,el){
+  if(!state[modId])state[modId]={lessons:{},notes:''};
+  state[modId].lessons[idx]=!state[modId].lessons[idx];
+  const check=el.querySelector('.lesson-check');
+  const text=el.querySelector('.lesson-text');
+  const isChecked=state[modId].lessons[idx];
+  check.className='lesson-check'+(isChecked?' checked':'');
+  check.textContent=isChecked?'✓':'';
+  text.className='lesson-text'+(isChecked?' checked-text':'');
+  updateModuleStatus(modId);
+  updateOverall();
+  saveAll();
+}
+
+function updateNotes(modId,val){
+  if(!state[modId])state[modId]={lessons:{},notes:''};
+  state[modId].notes=val;
+}
+
+function updateModuleStatus(modId){
+  let mod=null,isExam=false;
+  for(const c of courses){for(const m of c.modules){if(m.id===modId){mod=m;isExam=c.isExam||false;break;}}}
+  if(!mod)return;
+  const modState=state[modId]||{lessons:{}};
+  const totalL=mod.lessons.length;
+  const doneL=mod.lessons.filter((_,i)=>modState.lessons[i]).length;
+  const pct=totalL>0?Math.round((doneL/totalL)*100):0;
+  const pctEl=document.getElementById('mpct_'+modId);
+  const pillEl=document.getElementById('pill_'+modId);
+  const cardEl=document.getElementById('card_'+modId);
+  const ltitle=document.getElementById('ltitle_'+modId);
+  if(ltitle)ltitle.textContent=`Lecciones — ${doneL} de ${totalL} completadas`;
+  if(pctEl)pctEl.textContent=pct+'%';
+  let statusCls,pillCls,pillTxt;
+  if(pct===100){statusCls='done';pillCls='pill-done';pillTxt='✓ Completado';}
+  else if(pct>0){statusCls='active';pillCls='pill-active';pillTxt='En Progreso';}
+  else if(isExam){statusCls='exam-card';pillCls='pill-exam';pillTxt='Examen Final';}
+  else{statusCls='pending';pillCls='pill-pending';pillTxt='Pendiente';}
+  if(cardEl)cardEl.className=`module-card ${statusCls}`;
+  if(pillEl){pillEl.className=`status-pill ${pillCls}`;pillEl.textContent=pillTxt;}
+}
+
+function updateOverall(){
+  let totalL=0,doneL=0;
+  courses.forEach(c=>c.modules.forEach(m=>{
+    const ms=state[m.id]||{lessons:{}};
+    totalL+=m.lessons.length;
+    doneL+=m.lessons.filter((_,i)=>ms.lessons[i]).length;
+  }));
+  const pct=totalL>0?Math.round((doneL/totalL)*100):0;
+  document.getElementById('totalPct').textContent=pct+'%';
+  document.getElementById('overallPct').textContent=pct+'%';
+  document.getElementById('overallBar').style.width=pct+'%';
+  document.getElementById('lessonsCount').textContent=doneL;
+  document.getElementById('lessonsTotal').textContent=`de ${totalL} completadas`;
+}
+
+function updateDays(){
+  const diff=Math.ceil((new Date('2026-05-20')-new Date())/(1000*60*60*24));
+  document.getElementById('daysLeft').textContent=diff>0?diff+' días restantes':'¡Deadline alcanzado!';
+}
+
+render();
+</script>
+</body>
+</html>
